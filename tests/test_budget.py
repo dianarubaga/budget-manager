@@ -1,53 +1,59 @@
 
 import unittest
+import tempfile
+from pathlib import Path
+
 from src.models import Transaction
 from src.validation import validate_transaction
+from src.services import report
+from src.storage import save_transactions, load_transactions
 
 
 class TestBudgetManager(unittest.TestCase):
 
-    # Test 1: Normal transaction creation
-    def test_create_transaction(self):
-        transaction = Transaction(
-            id="T001",
-            date="2026-11-21",
-            kind="expense",
-            category="food",
-            amount=20.0
-        )
+    # Test 1: Normal balance calculation
+    def test_balance(self):
+        transactions = [
+            Transaction("T001", "2026-11-21", "income", "salary", 1500),
+            Transaction("T002", "2026-11-21", "expense", "food", 20)
+        ]
 
-        self.assertEqual(transaction.amount, 20.0)
-        self.assertEqual(transaction.category, "food")
-        self.assertEqual(transaction.currency, "EUR")
+        income, expenses, balance = report(transactions)
 
-    # Test 2: Convert transaction to a dictionary
-    def test_transaction_to_dict(self):
-        transaction = Transaction(
-            id="T002",
-            date="2026-11-21",
-            kind="income",
-            category="salary",
-            amount=1500.0
-        )
+        self.assertEqual(income, 1500)
+        self.assertEqual(expenses, 20)
+        self.assertEqual(balance, 1480)
 
-        result = transaction.to_dict()
-
-        self.assertEqual(result["amount"], 1500.0)
-        self.assertEqual(result["kind"], "income")
-
-    # Test 3: Reject negative amounts
+    # Test 2: Reject negative amounts
     def test_negative_amount(self):
         with self.assertRaises(ValueError):
-            validate_transaction(
-                "2026-11-21", "expense", "food", -20
-            )
+            validate_transaction("expense", "food", -20, "2026-11-21")
 
-    # Test 4: Reject invalid categories
+    # Test 3: Reject invalid categories
     def test_invalid_category(self):
         with self.assertRaises(ValueError):
-            validate_transaction(
-                "2026-11-21", "expense", "shopping", 20
-            )
+            validate_transaction("expense", "shopping", 20, "2026-11-21")
+
+    # Test 4: Reject invalid dates
+    def test_invalid_date(self):
+        with self.assertRaises(ValueError):
+            validate_transaction("expense", "food", 20, "2026-02-30")
+
+    # Test 5: Save and load transactions
+    def test_save_and_load(self):
+        transactions = [
+            Transaction("T001", "2026-11-21", "expense", "food", 20)
+        ]
+
+        with tempfile.TemporaryDirectory() as folder:
+            file = Path(folder) / "transactions.json"
+
+            save_transactions(file, transactions)
+            loaded = load_transactions(file)
+
+            self.assertEqual(len(loaded), 1)
+            self.assertEqual(loaded[0].amount, 20)
+            self.assertEqual(loaded[0].category, "food")
 
 
 if __name__ == "__main__":
