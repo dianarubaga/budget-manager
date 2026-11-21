@@ -1,0 +1,12 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Personal transaction data
+data/transactions.json
+
+# macOS
+.DS_Store
