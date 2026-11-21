@@ -1,0 +1,18 @@
+[
+  {
+    "id": "T001",
+    "date": "2026-11-21",
+    "kind": "income",
+    "category": "salary",
+    "amount": 1500.0,
+    "currency": "EUR"
+  },
+  {
+    "id": "T002",
+    "date": "2026-11-21",
+    "kind": "expense",
+    "category": "food",
+    "amount": 20.0,
+    "currency": "EUR"
+  }
+]
