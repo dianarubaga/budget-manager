@@ -3,10 +3,12 @@ import unittest
 import tempfile
 from pathlib import Path
 
-from src.models import Transaction
-from src.validation import validate_transaction
-from src.services import report
-from src.storage import save_transactions, load_transactions
+
+from budget_manager.models import Transaction
+from budget_manager.validation import validate_transaction
+from budget_manager.services import report
+from budget_manager.storage import save_transactions, load_transactions
+
 
 
 class TestBudgetManager(unittest.TestCase):
