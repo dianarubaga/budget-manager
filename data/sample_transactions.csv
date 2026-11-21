@@ -1,2 +1,12 @@
-id,date,kind,category,amount,currency
 
+id,date,kind,category,amount,currency
+T001,2026-11-21,income,salary,1500,EUR
+T002,2026-11-21,expense,food,20,EUR
+T003,2026-11-21,expense,transport,50,EUR
+T004,2026-11-20,expense,entertainment,35,EUR
+T005,2026-11-19,expense,housing,600,EUR
+T006,2026-11-21,expense,food,-20,EUR
+T007,2026-11-21,expense,shopping,50,EUR
+T008,2026-02-30,expense,food,25,EUR
+T009,2026-11-21,expense,transport,0,EUR
+T010,2026-11-21,income,salary,100,USD
